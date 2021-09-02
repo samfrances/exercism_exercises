@@ -43,13 +43,13 @@ defmodule NucleotideCount do
   end
 
   @spec histogram_tail(charlist(), map()) :: map()
-  def histogram_tail([], counters), do: counters
-  def histogram_tail([nucleotide|rest], counters) do
+  defp histogram_tail([], counters), do: counters
+  defp histogram_tail([nucleotide|rest], counters) do
     updated_counters = Map.update(
       counters,
       nucleotide,
       1,
-      fn x -> x + 1 end
+      & &1 + 1
     )
     histogram_tail(rest, updated_counters)
   end

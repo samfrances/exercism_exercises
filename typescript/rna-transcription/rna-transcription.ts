@@ -1,30 +1,30 @@
 
 export function toRna(dna: string): string {
-  const asArray = Array.from(dna)
+  const asArray = [...dna];
   if (!isDna(asArray)) {
-    throw new Error('Invalid input DNA.')
+    throw new Error('Invalid input DNA.');
   }
   return toRnaStrict(asArray).join("");
 }
 
 function toRnaStrict(dna: DNA): RNA {
-    return dna.map(dnaNucleotidetoRnaNucleotide);
+  return dna.map(dna => TRANSCRIPTION[dna]);
 }
 
-function dnaNucleotidetoRnaNucleotide(dna: DNA_NUCLEOTIDE): RNA_NUCLEOTIDE {
-  return RNA_NUCLEOTIDES[DNA_NUCLEOTIDES.indexOf(dna)];
-}
+const TRANSCRIPTION = {
+  "A": "U",
+  "C": "G",
+  "G": "C",
+  "T": "A"
+} as const;
 
-const DNA_NUCLEOTIDES = ["A", "C", "G", "T"] as const;
-const RNA_NUCLEOTIDES = ["U", "G", "C", "A"] as const;
-
-type DNA_NUCLEOTIDE = typeof DNA_NUCLEOTIDES[number];
-type DNA = DNA_NUCLEOTIDE[]
-type RNA_NUCLEOTIDE = typeof RNA_NUCLEOTIDES[number];
-type RNA = RNA_NUCLEOTIDE[]
+type DNA_NUCLEOTIDE = keyof typeof TRANSCRIPTION;
+type DNA = DNA_NUCLEOTIDE[];
+type RNA_NUCLEOTIDE = typeof TRANSCRIPTION[DNA_NUCLEOTIDE];
+type RNA = RNA_NUCLEOTIDE[];
 
 function isDnaNucleotide(char: string): char is DNA_NUCLEOTIDE {
-  return DNA_NUCLEOTIDES.includes(char as DNA_NUCLEOTIDE);
+  return Object.keys(TRANSCRIPTION).includes(char as DNA_NUCLEOTIDE);
 }
 
 function isDna(val: string[]): val is DNA {

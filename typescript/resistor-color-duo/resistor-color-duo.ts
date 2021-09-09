@@ -1,38 +1,34 @@
-export function decodedValue([first, second, ..._rest]: [ResistorString, ResistorString, ...ResistorString[]]) {
-  return resistorValue(
-    Resistor[first],
-    Resistor[second]
-  )
+export function decodedValue([first, second, ..._rest]: [string, string, ...string[]]) {
+  assertIsResistor(first);
+  assertIsResistor(second);
+  return resistorValue(first) * 10 + resistorValue(second);
 }
 
-function resistorValue(first: Resistor, second: Resistor): number {
-  return resistorValues[first] * 10 + resistorValues[second]
+function resistorValue(resistor: Resistor): number {
+  return resistors.indexOf(resistor);
 }
 
-enum Resistor {
-  black = "black",
-  brown = "brown",
-  red = "red",
-  orange = "orange",
-  yellow = "yellow",
-  green = "green",
-  blue = "blue",
-  violet = "violet",
-  grey = "grey",
-  white = "white",
+const resistors = [
+  "black",
+  "brown",
+  "red",
+  "orange",
+  "yellow",
+  "green",
+  "blue",
+  "violet",
+  "grey",
+  "white",
+] as const;
+
+type Resistor = typeof resistors[number];
+
+function isResistor(val: string): val is Resistor {
+  return resistors.includes(val as Resistor);
 }
 
-type ResistorString = `${Resistor}`;
-
-const resistorValues = {
-  [Resistor.black]:  0,
-  [Resistor.brown]:  1,
-  [Resistor.red]:    2,
-  [Resistor.orange]: 3,
-  [Resistor.yellow]: 4,
-  [Resistor.green]:  5,
-  [Resistor.blue]:   6,
-  [Resistor.violet]: 7,
-  [Resistor.grey]:   8,
-  [Resistor.white]:  9
-} as const;
+function assertIsResistor(val: string): asserts val is Resistor {
+  if (!isResistor(val)) {
+    throw new Error(`Not a resistor name: ${val}`);
+  }
+}

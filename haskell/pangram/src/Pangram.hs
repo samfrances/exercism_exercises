@@ -5,9 +5,8 @@ import Data.Char (toLower)
 
 isPangram :: String -> Bool
 isPangram text =
-    (countUniqueLetters text) >= 26
-    where countUniqueLetters = length . unique . alphaLetters
-          unique = map head . group . sort
-          alphaLetters = filter isAlpha . map toLower
+    (length . unique . letters $ text) >= 26
+    where unique = map head . group . sort
+          letters = filter isAlpha . map toLower
           isAlpha = (`elem` alphabet)
           alphabet = "abcdefghijklmnopqrstuvwxyz"

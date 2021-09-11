@@ -4,28 +4,28 @@ import Data.Char (isSpace, toUpper, isAlpha)
 import Data.List (dropWhileEnd)
 
 responseFor :: String -> String
-responseFor = responseForProcessedComment . processComment
+responseFor = responseFor' . processComment
 
-responseForProcessedComment :: String -> String
-responseForProcessedComment "" = "Fine. Be that way!"
-responseForProcessedComment ('?':rest) = responseForQuestion rest
-responseForProcessedComment comment
-    | isShouting comment = "Whoa, chill out!"
-    | otherwise          = "Whatever."
+responseFor' :: ProcessedComment -> String
+responseFor' comment
+    | isSilence comment        = "Fine. Be that way!"
+    | isQuestion comment       =
+        if isShouting comment
+            then "Calm down, I know what I'm doing!"
+            else "Sure."
+    | isShouting comment       = "Whoa, chill out!"
+    | otherwise                = "Whatever."
+    where
+        isQuestion (ProcessedComment ('?':_)) = True
+        isQuestion (ProcessedComment _) = False
+        isSilence (ProcessedComment "") = True
+        isSilence (ProcessedComment _)  = False
+        isShouting (ProcessedComment c) =
+            (map toUpper c) == c && (any isAlpha c)
 
-responseForQuestion :: String -> String
-responseForQuestion q
-    | isShouting q = "Calm down, I know what I'm doing!"
-    | otherwise    = "Sure."
-
-isShouting :: String -> Bool
-isShouting comment =
-    (map toUpper comment) == comment
-    && (any isAlpha comment)
-
-
-processComment :: String -> String
-processComment = reverse . trim
+data ProcessedComment = ProcessedComment String
+processComment :: String -> ProcessedComment
+processComment = ProcessedComment . reverse . trim
 
 trim :: String -> String
 trim = dropWhileEnd isSpace . dropWhile isSpace

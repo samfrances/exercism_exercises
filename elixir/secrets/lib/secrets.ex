@@ -29,7 +29,7 @@ defmodule Secrets do
     fn x -> Bitwise.^^^(secret, x) end
   end
 
-  @spec secret_combine(any, any) :: (any -> any)
+  @spec secret_combine((any -> any), (any -> any)) :: (any -> any)
   def secret_combine(secret_function1, secret_function2) do
     fn x -> x |> secret_function1.() |> secret_function2.() end
   end

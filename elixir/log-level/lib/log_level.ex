@@ -31,7 +31,7 @@ defmodule LogLevel do
     |> route_by_level_name(legacy?)
   end
 
-  def route_by_level_name(name, legacy?) do
+  defp route_by_level_name(name, legacy?) do
     cond do
       name == @fatal or name == @error -> @opsteam
       name == @unknown and legacy?     -> @devteam1

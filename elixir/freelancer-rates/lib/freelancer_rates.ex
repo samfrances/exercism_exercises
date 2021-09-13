@@ -1,10 +1,10 @@
 defmodule FreelancerRates do
-  @billable_hours_in_day 8
+  @billable_hours_in_day 8.0
   @billable_days_in_month 22
 
   @spec daily_rate(number) :: float
   def daily_rate(hourly_rate) do
-    (@billable_hours_in_day * hourly_rate) / 1
+    (@billable_hours_in_day * hourly_rate)
   end
   @spec daily_rate(number, number) :: float
   def daily_rate(hourly_rate, discount) do

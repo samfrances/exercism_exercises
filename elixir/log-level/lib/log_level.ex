@@ -11,15 +11,19 @@ defmodule LogLevel do
   @devteam2 :dev2
   @opsteam :ops
 
-  def to_label(_level = 0, _legacy? = true),  do: @unknown
-  def to_label(_level = 0, _legacy?),         do: @trace
-  def to_label(_level = 1, _legacy?),         do: @debug
-  def to_label(_level = 2, _legacy?),         do: @info
-  def to_label(_level = 3, _legacy?),         do: @warning
-  def to_label(_level = 4, _legacy?),         do: @error
-  def to_label(_level = 5, _legacy? = true),  do: @unknown
-  def to_label(_level = 5, _legacy? = false), do: @fatal
-  def to_label(_level, _legacy?),             do: @unknown
+  def to_label(level, legacy?) do
+    cond do
+      level == 0 and legacy? -> @unknown
+      level == 0             -> @trace
+      level == 1             -> @debug
+      level == 2             -> @info
+      level == 3             -> @warning
+      level == 4             -> @error
+      level == 5 and legacy? -> @unknown
+      level == 5             -> @fatal
+      true                   -> @unknown
+    end
+  end
 
   def alert_recipient(level, legacy?) do
     level
@@ -27,10 +31,13 @@ defmodule LogLevel do
     |> route_by_level_name(legacy?)
   end
 
-  def route_by_level_name(@fatal,   _legacy?),        do: @opsteam
-  def route_by_level_name(@error,   _legacy?),        do: @opsteam
-  def route_by_level_name(@unknown, _legacy? = true), do: @devteam1
-  def route_by_level_name(@unknown, _legacy?),        do: @devteam2
-  def route_by_level_name(_name,    _legacy?),        do: nil
+  def route_by_level_name(name, legacy?) do
+    cond do
+      name == @fatal or name == @error -> @opsteam
+      name == @unknown and legacy?     -> @devteam1
+      name == @unknown                 -> @devteam2
+      true                             -> nil
+    end
+  end
 
 end

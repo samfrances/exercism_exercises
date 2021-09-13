@@ -8,13 +8,11 @@ defmodule LanguageList do
   end
 
   def remove([]), do: []
-  def remove(list) do
-    [_first | rest] = list
+  def remove([_first | rest]) do
     rest
   end
 
-  def first(list) do
-    [first | _rest] = list
+  def first([first | _rest]) do
     first
   end
 

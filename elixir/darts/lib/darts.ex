@@ -36,8 +36,7 @@ defmodule Geometry do
 
   @spec pythagoras(number, number) :: float
   def pythagoras(a, b) do
-    :math.pow(a, 2) + :math.pow(b, 2)
-    |> :math.sqrt()
+    :math.sqrt(:math.pow(a, 2) + :math.pow(b, 2))
   end
 
 end

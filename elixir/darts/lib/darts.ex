@@ -7,25 +7,25 @@ defmodule Darts do
   """
   @spec score(position :: position) :: integer
   def score(pos) do
+    pos |> lands_within() |> score_circle()
+  end
+
+  defp score_circle(:center),  do: 10
+  defp score_circle(:middle), do: 5
+  defp score_circle(:outer),  do: 1
+  defp score_circle(_),       do: 0
+
+  @spec lands_within(pos :: position) :: circle | nil
+  defp lands_within({x, y}) do
     cond do
-      lands_within(:center, pos) -> 10
-      lands_within(:middle, pos) -> 5
-      lands_within(:outer, pos)  -> 1
-      true                       -> 0
+      distance_from_center({x, y}) <= 1  -> :center
+      distance_from_center({x, y}) <= 5  -> :middle
+      distance_from_center({x, y}) <= 10 -> :outer
+      true                               -> nil
     end
   end
 
-  @spec lands_within(circle :: circle, pos :: position) :: boolean
-  defp lands_within(:outer, {x, y}) do
-    distance_from_center({x, y}) <= 10
-  end
-  defp lands_within(:middle, {x, y}) do
-    distance_from_center({x, y}) <= 5
-  end
-  defp lands_within(:center, {x, y}) do
-    distance_from_center({x, y}) <= 1
-  end
-
+  @spec distance_from_center(position) :: float
   defp distance_from_center({x, y}) do
     Geometry.pythagoras(x, y) |> abs()
   end

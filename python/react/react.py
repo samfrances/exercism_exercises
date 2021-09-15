@@ -38,20 +38,17 @@ class ComputeCell(Cell):
         self._inputs = inputs
         self._compute_function = compute_function
         for input_ in self._inputs:
-            input_.add_callback(self._recalculate)
-        self._value = self._calculate()
+            input_.add_callback(self._maybe_notify)
+        self._previous_value = self.value
 
-    def _calculate(self):
-        return self._compute_function([
-            input_.value for input_ in self._inputs
-        ])
-
-    def _recalculate(self, value=None):
-        recalculated = self._calculate()
-        if recalculated != self._value:
-            self._value = recalculated
+    def _maybe_notify(self, value=None):
+        new_value = self.value
+        if new_value != self._previous_value:
+            self._previous_value = new_value
             self._notify_callbacks()
 
     @property
     def value(self):
-        return self._calculate()
+        return self._compute_function([
+            input_.value for input_ in self._inputs
+        ])

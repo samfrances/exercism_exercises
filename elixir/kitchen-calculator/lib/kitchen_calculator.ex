@@ -1,9 +1,4 @@
 defmodule KitchenCalculator do
-  @ml :milliliter
-  @cup :cup
-  @fluid_ounce :fluid_ounce
-  @tsp :teaspoon
-  @tbsp :tablespoon
 
   @type unit :: :milliliter | :cup | :fluid_ounce | :teaspoon | :tablespoon
   @type unit_volume_pair :: {unit, number}
@@ -14,13 +9,13 @@ defmodule KitchenCalculator do
   @spec to_milliliter(unit_volume_pair) :: {:milliliter, number}
   def to_milliliter({unit, volume}) do
     {
-      @ml,
+      :milliliter,
       volume * conversion_factor(unit)
     }
   end
 
   @spec from_milliliter({:milliliter, number}, unit) :: unit_volume_pair()
-  def from_milliliter({@ml, volume}, unit) do
+  def from_milliliter({:milliliter, volume}, unit) do
     {
       unit,
       volume / conversion_factor(unit)
@@ -35,9 +30,9 @@ defmodule KitchenCalculator do
   end
 
   @spec conversion_factor(unit) :: integer()
-  defp conversion_factor(@ml), do: 1
-  defp conversion_factor(@cup), do: 240
-  defp conversion_factor(@fluid_ounce), do: 30
-  defp conversion_factor(@tsp), do: 5
-  defp conversion_factor(@tbsp), do: 15
+  defp conversion_factor(:milliliter), do: 1
+  defp conversion_factor(:cup), do: 240
+  defp conversion_factor(:fluid_ounce), do: 30
+  defp conversion_factor(:teaspoon), do: 5
+  defp conversion_factor(:tablespoon), do: 15
 end

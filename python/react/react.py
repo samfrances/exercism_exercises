@@ -57,8 +57,7 @@ class ComputeCell(Cell):
 
     @property
     def dirty(self):
-        dirty = any(inp.dirty for inp in self._inputs)
-        return dirty
+        return any(inp.dirty for inp in self._inputs)
 
     @cached_property
     def _cached_value(self):

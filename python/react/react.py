@@ -27,9 +27,9 @@ class InputCell(Cell):
         return self._value
 
     @value.setter
-    def value(self, val):
-        if val != self._value:
-            self._value = val
+    def value(self, new_val):
+        if new_val != self._value:
+            self._value = new_val
             self._notify_callbacks()
 
 
@@ -38,10 +38,10 @@ class ComputeCell(Cell):
         self._inputs = inputs
         self._compute_function = compute_function
         for input_ in self._inputs:
-            input_.add_callback(self._maybe_notify)
+            input_.add_callback(self._notify_on_change)
         self._previous_value = self.value
 
-    def _maybe_notify(self, value=None):
+    def _notify_on_change(self, value=None):
         new_value = self.value
         if new_value != self._previous_value:
             self._previous_value = new_value

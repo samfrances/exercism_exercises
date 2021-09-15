@@ -35,10 +35,9 @@ defmodule KitchenCalculator do
   end
 
   @spec conversion_factor(unit) :: integer()
-  defp conversion_factor(@ml),          do: 1
-  defp conversion_factor(@cup),         do: 240
+  defp conversion_factor(@ml), do: 1
+  defp conversion_factor(@cup), do: 240
   defp conversion_factor(@fluid_ounce), do: 30
-  defp conversion_factor(@tsp),         do: 5
-  defp conversion_factor(@tbsp),        do: 15
-
+  defp conversion_factor(@tsp), do: 5
+  defp conversion_factor(@tbsp), do: 15
 end

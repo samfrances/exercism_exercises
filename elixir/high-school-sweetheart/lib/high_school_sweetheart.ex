@@ -31,11 +31,7 @@ defmodule HighSchoolSweetheart do
     name
     |> first_letter()
     |> String.upcase()
-    |> add_suffix(".")
-  end
-
-  defp add_suffix(string, suffix) do
-    string <> suffix
+    |> Operator.concat(".")
   end
 
   def initials(full_name) do
@@ -49,4 +45,8 @@ defmodule HighSchoolSweetheart do
     |> String.replace("X. X.",  initials(full_name1))
     |> String.replace("Y. Y.",  initials(full_name2))
   end
+end
+
+defmodule Operator do
+  def concat(a, b), do: a <> b
 end

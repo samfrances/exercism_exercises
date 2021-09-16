@@ -4,16 +4,11 @@ defmodule BirdCount do
   @spec today(birdcounts) :: non_neg_integer
   def today([]), do: nil
 
-  def today([this_day | _] = counts)
-      when length(counts) > 0,
-      do: this_day
+  def today([this_day | _]), do: this_day
 
   @spec increment_day_count(birdcounts) :: birdcounts
   def increment_day_count([]), do: [1]
-
-  def increment_day_count([today | rest] = counts)
-      when length(counts) >= 1,
-      do: [today + 1 | rest]
+  def increment_day_count([today | rest]), do: [today + 1 | rest]
 
   @spec has_day_without_birds?(birdcounts) :: boolean
   def has_day_without_birds?(list) do

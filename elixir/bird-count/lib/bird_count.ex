@@ -77,7 +77,7 @@ defmodule MyEnum do
   end
 
   defp filter([], _predicate, result) do
-    Enum.reverse(result)
+    reverse(result)
   end
   defp filter([first|rest], predicate, result) do
     new_result = if predicate.(first) do
@@ -86,5 +86,14 @@ defmodule MyEnum do
       result
     end
     filter(rest, predicate, new_result)
+  end
+
+  defp reverse(list) do
+    reverse(list, [])
+  end
+
+  defp reverse([], result), do: result
+  defp reverse([first|rest], result) do
+    reverse(rest, [first|result])
   end
 end

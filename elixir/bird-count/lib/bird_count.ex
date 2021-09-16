@@ -6,7 +6,7 @@ defmodule BirdCount do
 
   def today([this_day | _] = counts)
       when length(counts) > 0,
-                 do: this_day
+      do: this_day
 
   @spec increment_day_count(birdcounts) :: birdcounts
   def increment_day_count([]), do: [1]
@@ -48,7 +48,8 @@ defmodule MyEnum do
 
   defp any?([], _func, found?), do: found?
   defp any?(_list, _func, found? = true), do: found?
-  defp any?([first|rest], func, _found?) do
+
+  defp any?([first | rest], func, _found?) do
     any?(rest, func, func.(first))
   end
 
@@ -58,7 +59,8 @@ defmodule MyEnum do
   end
 
   defp sum([], count), do: count
-  defp sum([first|rest], count) do
+
+  defp sum([first | rest], count) do
     sum(rest, first + count)
   end
 
@@ -68,7 +70,8 @@ defmodule MyEnum do
   end
 
   defp count([], counter), do: counter
-  defp count([_first|rest], counter) do
+
+  defp count([_first | rest], counter) do
     count(rest, counter + 1)
   end
 
@@ -79,12 +82,15 @@ defmodule MyEnum do
   defp filter([], _predicate, result) do
     reverse(result)
   end
-  defp filter([first|rest], predicate, result) do
-    new_result = if predicate.(first) do
-      [first|result]
-    else
-      result
-    end
+
+  defp filter([first | rest], predicate, result) do
+    new_result =
+      if predicate.(first) do
+        [first | result]
+      else
+        result
+      end
+
     filter(rest, predicate, new_result)
   end
 
@@ -93,7 +99,8 @@ defmodule MyEnum do
   end
 
   defp reverse([], result), do: result
-  defp reverse([first|rest], result) do
-    reverse(rest, [first|result])
+
+  defp reverse([first | rest], result) do
+    reverse(rest, [first | result])
   end
 end

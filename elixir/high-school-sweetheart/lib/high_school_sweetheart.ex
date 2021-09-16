@@ -1,32 +1,52 @@
 defmodule HighSchoolSweetheart do
-  def first_letter(name) do
-    # Please implement the first_letter/1 function
+
+  @template """
+       ******       ******
+     **      **   **      **
+   **         ** **         **
+  **            *            **
+  **                         **
+  **     X. X.  +  Y. Y.     **
+   **                       **
+     **                   **
+       **               **
+         **           **
+           **       **
+             **   **
+               ***
+                *
+  """
+
+  @spec first_letter(binary) :: nil | binary
+  def first_letter(name) when
+    is_binary(name)
+    and byte_size(name) > 0
+  do
+    name
+    |> String.trim()
+    |> String.first()
   end
 
   def initial(name) do
-    # Please implement the initial/1 function
+    name
+    |> first_letter()
+    |> String.upcase()
+    |> add_suffix(".")
+  end
+
+  defp add_suffix(string, suffix) do
+    string <> suffix
   end
 
   def initials(full_name) do
-    # Please implement the initials/1 function
+    full_name
+    |> String.split()
+    |> (fn [f, l] -> "#{initial(f)} #{initial(l)}" end).()
   end
 
   def pair(full_name1, full_name2) do
-    #      ******       ******
-    #    **      **   **      **
-    #  **         ** **         **
-    # **            *            **
-    # **                         **
-    # **     X. X.  +  X. X.     **
-    #  **                       **
-    #    **                   **
-    #      **               **
-    #        **           **
-    #          **       **
-    #            **   **
-    #              ***
-    #               *
-
-    # Please implement the pair/2 function
+    @template
+    |> String.replace("X. X.",  initials(full_name1))
+    |> String.replace("Y. Y.",  initials(full_name2))
   end
 end

@@ -6,7 +6,7 @@ defmodule BirdCount do
 
   def today([this_day | _] = counts)
       when length(counts) > 0,
-      do: this_day
+                 do: this_day
 
   @spec increment_day_count(birdcounts) :: birdcounts
   def increment_day_count([]), do: [1]
@@ -18,20 +18,73 @@ defmodule BirdCount do
   @spec has_day_without_birds?(birdcounts) :: boolean
   def has_day_without_birds?(list) do
     list
-    |> Enum.any?(&(&1 == 0))
+    |> MyEnum.any?(&(&1 == 0))
   end
 
   @spec total(birdcounts) :: non_neg_integer
   def total(list) do
-    Enum.sum(list)
+    MyEnum.sum(list)
   end
 
   @spec busy_days(birdcounts) :: non_neg_integer
   def busy_days(list) do
     list
-    |> Enum.filter(&busy?/1)
-    |> Enum.count()
+    |> MyEnum.filter(&busy?/1)
+    |> MyEnum.count()
   end
 
   defp busy?(day), do: day >= 5
+end
+
+defmodule MyEnum do
+  @doc """
+  Because this is ment to be an exercise in recursion,
+  re-implement Enum functions using recursion
+  """
+
+  def any?(list, func) do
+    any?(list, func, false)
+  end
+
+  defp any?([], _func, found?), do: found?
+  defp any?(_list, _func, found? = true), do: found?
+  defp any?([first|rest], func, _found?) do
+    any?(rest, func, func.(first))
+  end
+
+  @spec sum([number]) :: number
+  def sum(list) do
+    sum(list, 0)
+  end
+
+  defp sum([], count), do: count
+  defp sum([first|rest], count) do
+    sum(rest, first + count)
+  end
+
+  @spec count(list) :: non_neg_integer
+  def count(list) do
+    count(list, 0)
+  end
+
+  defp count([], counter), do: counter
+  defp count([_first|rest], counter) do
+    count(rest, counter + 1)
+  end
+
+  def filter(list, predicate) do
+    filter(list, predicate, [])
+  end
+
+  defp filter([], _predicate, result) do
+    Enum.reverse(result)
+  end
+  defp filter([first|rest], predicate, result) do
+    new_result = if predicate.(first) do
+      [first|result]
+    else
+      result
+    end
+    filter(rest, predicate, new_result)
+  end
 end

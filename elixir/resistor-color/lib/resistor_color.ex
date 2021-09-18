@@ -16,7 +16,6 @@ defmodule ResistorColor do
     :white
   ]
 
-
   def code(code) when code in @resistor_values do
     Enum.find_index(@resistor_values, fn x -> x == code end)
   end

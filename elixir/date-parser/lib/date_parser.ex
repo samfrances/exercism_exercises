@@ -4,7 +4,7 @@ defmodule DateParser do
   end
 
   def month() do
-    ~r/[0-12]|0[1-9]/
+    "(1[0-2]|[1-9])"
   end
 
   def year() do

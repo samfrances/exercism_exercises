@@ -2,12 +2,14 @@ module CollatzConjecture (collatz) where
 
 collatz :: Integer -> Maybe Integer
 collatz n
-    | n > 0     = Just (collatzCount n 0)
+    | n > 0     = Just (collatzCount n)
     | otherwise = Nothing
 
-collatzCount :: Integer -> Integer -> Integer
-collatzCount 1 count = count
-collatzCount n count = collatzCount (collatzStep n) (count + 1)
+collatzCount :: Integer -> Integer
+collatzCount = fromIntegral . length . collatzSeq
+
+collatzSeq :: Integer -> [Integer]
+collatzSeq = takeWhile (> 1) . iterate collatzStep
 
 collatzStep :: Integer -> Integer
 collatzStep n

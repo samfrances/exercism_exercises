@@ -1,14 +1,14 @@
 defmodule DateParser do
   def day() do
-    # Please implement the day/0 function
+    "(3[01]|[12][0-9]|[1-9]|0[1-9])"
   end
 
   def month() do
-    # Please implement the month/0 function
+    ~r/[0-12]|0[1-9]/
   end
 
   def year() do
-    # Please implement the year/0 function
+    ~r/\d{4}/
   end
 
   def day_names() do

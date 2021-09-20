@@ -32,34 +32,34 @@ defmodule DateParser do
   end
 
   def capture_day_name() do
-    # Please implement the capture_day_name/0 function
+    "(?<day_name>#{day_names()})"
   end
 
   def capture_month_name() do
-    # Please implement the capture_month_name/0 function
+    "(?<month_name>#{month_names()})"
   end
 
   def capture_numeric_date() do
-    # Please implement the capture_numeric_date/0 function
+    "#{capture_day()}/#{capture_month()}/#{capture_year()}"
   end
 
   def capture_month_name_date() do
-    # Please implement the capture_month_name_date/0 function
+    "#{capture_month_name()} #{capture_day()}, #{capture_year()}"
   end
 
   def capture_day_month_name_date() do
-    # Please implement the capture_day_month_name_date/0 function
+    "#{capture_day_name()}, #{capture_month_name_date()}"
   end
 
   def match_numeric_date() do
-    # Please implement the match_numeric_date/0 function
+    Regex.compile!("^#{capture_numeric_date()}$")
   end
 
   def match_month_name_date() do
-    # Please implement the match_month_name_day/0 function
+    Regex.compile!("^#{capture_month_name_date()}$")
   end
 
   def match_day_month_name_date() do
-    # Please implement the match_day_month_name_date/0 function
+    Regex.compile!("^#{capture_day_month_name_date()}$")
   end
 end

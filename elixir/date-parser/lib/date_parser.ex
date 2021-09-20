@@ -12,7 +12,7 @@ defmodule DateParser do
   end
 
   def day_names() do
-    # Please implement the day_names/0 function
+    "(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day"
   end
 
   def month_names() do

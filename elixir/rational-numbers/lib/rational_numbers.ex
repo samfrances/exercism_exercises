@@ -71,9 +71,7 @@ defmodule RationalNumbers do
   Exponentiation of a real number by a rational number
   """
   @spec pow_real(x :: integer, n :: rational) :: float
-  def pow_real(_x, {0, _b}), do: 1.0
   def pow_real(x, {a, b}) do
-    # Newton.nth_root(:math.pow(x, a), b)
     :math.pow(x, (a / b))
   end
 

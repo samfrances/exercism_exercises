@@ -73,7 +73,8 @@ defmodule RationalNumbers do
   @spec pow_real(x :: integer, n :: rational) :: float
   def pow_real(_x, {0, _b}), do: 1.0
   def pow_real(x, {a, b}) do
-    Newton.nth_root(:math.pow(x, a), b)
+    # Newton.nth_root(:math.pow(x, a), b)
+    :math.pow(x, (a / b))
   end
 
   @doc """
@@ -104,22 +105,4 @@ defmodule RationalNumbers do
     gcd(b, rem(a, b))
   end
 
-end
-
-defmodule Newton do
-  def nth_root(x, n) do
-    nth_root(x, n, 3)
-  end
-
-  defp nth_root(x, n, a) do
-    f = :math.pow(a, n) - x
-    f_prime = n * :math.pow(a, n - 1)
-    next = a - f / f_prime
-    change = abs(next - a)
-    if change < 1.0e-10 do
-      next
-    else
-      nth_root(x, n, next)
-    end
-  end
 end

@@ -4,7 +4,7 @@ defmodule DateParser do
   end
 
   def month() do
-    "(1[0-2]|[1-9])"
+    "(1[0-2]|[1-9]|0[1-9])"
   end
 
   def year() do
@@ -20,15 +20,15 @@ defmodule DateParser do
   end
 
   def capture_day() do
-    # Please implement the capture_day/0 function
+    "(?<day>#{day()})"
   end
 
   def capture_month() do
-    # Please implement the capture_month/0 function
+    "(?<month>#{month()})"
   end
 
   def capture_year() do
-    # Please implement the capture_year/0 function
+    "(?<year>#{year()})"
   end
 
   def capture_day_name() do

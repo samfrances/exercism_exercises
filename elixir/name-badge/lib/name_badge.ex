@@ -1,13 +1,13 @@
 defmodule NameBadge do
-  def print(id, name, department) do
-    # Solved using if-expressions, as an exercise in their use
-    department_name =
-      if department == nil do "owner" else department end
-      |> String.upcase()
+  def print(id, name, department) when is_nil(department) do
+    print(id, name, "owner")
+  end
 
+  def print(id, name, department) do
     id_string =
       if id == nil do "" else "[#{id}] - " end
 
-    "#{id_string}#{name} - #{department_name}"
+    "#{id_string}#{name} - #{department |> String.upcase()}"
   end
-end
+
+ end

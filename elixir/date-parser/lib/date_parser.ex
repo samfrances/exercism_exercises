@@ -8,7 +8,7 @@ defmodule DateParser do
   end
 
   def year() do
-    ~r/\d{4}/
+    "\\d{4}"
   end
 
   def day_names() do

@@ -8,23 +8,14 @@ defmodule WineCellar do
   end
 
   def filter(cellar, color, opts \\ []) do
+    year = Keyword.get(opts, :year)
+    country = Keyword.has_key?(opts, :country)
+
     cellar
-    |> Enum.filter(fn {bottle_color, _wine} -> bottle_color == color end)
-    |> Enum.map(fn {_color, wine} -> wine end)
-    |> Kernel.then(fn wines ->
-      if Keyword.has_key?(opts, :year) do
-        filter_by_year(wines, Keyword.get(opts, :year))
-      else
-        wines
-      end
-    end)
-    |> Kernel.then(fn wines ->
-      if Keyword.has_key?(opts, :country) do
-        filter_by_country(wines, Keyword.get(opts, :country))
-      else
-        wines
-      end
-    end)
+    |> Keyword.get_values(color)
+    |> Kernel.then(& if year, do: filter_by_year(&1, year), else: &1)
+    |> Kernel.then(& if country, do: filter_by_country(&1, country), else: &1)
+
   end
 
 

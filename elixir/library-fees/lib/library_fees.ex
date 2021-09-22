@@ -1,14 +1,23 @@
 defmodule LibraryFees do
   def datetime_from_string(string) do
-    # Please implement the datetime_from_string/1 function
+    NaiveDateTime.from_iso8601!(string)
   end
 
   def before_noon?(datetime) do
-    # Please implement the before_noon?/1 function
+    datetime
+    |> NaiveDateTime.to_time()
+    |> Time.compare(~T[12:00:00])
+    |> Kernel.==(:lt)
   end
 
   def return_date(checkout_datetime) do
-    # Please implement the return_date/1 function
+    checkout_datetime
+    |> NaiveDateTime.to_date()
+    |> Date.add(days_to_return checkout_datetime)
+  end
+
+  defp days_to_return(datetime) do
+    if before_noon?(datetime), do: 28, else: 29
   end
 
   def days_late(planned_return_date, actual_return_datetime) do

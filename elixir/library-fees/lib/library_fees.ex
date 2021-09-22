@@ -43,12 +43,25 @@ defmodule LibraryFees do
     |> Kernel.==(@monday)
   end
 
+  @spec calculate_late_fee(String.t, String.t, number) :: number
   def calculate_late_fee(checkout, return, rate) do
     checkout_dt = NaiveDateTime.from_iso8601!(checkout)
     returned_dt = NaiveDateTime.from_iso8601!(return)
-    planned_return_date = return_date(checkout_dt)
-    days_late = days_late(planned_return_date, returned_dt)
-    fee = days_late * rate
+
+    checkout_dt
+    |> return_date()
+    |> days_late(returned_dt)
+    |> fee(rate)
+    |> apply_discount(returned_dt)
+  end
+
+  @spec fee(non_neg_integer, number) :: number
+  defp fee(days_late, rate) do
+    days_late * rate
+  end
+
+  @spec apply_discount(number, NaiveDateTime.t) :: number
+  defp apply_discount(fee, returned_dt) do
     if monday?(returned_dt) do
       fee - round(@monday_discount * fee)
     else

@@ -1,8 +1,11 @@
 defmodule LibraryFees do
+
+  @spec datetime_from_string(binary) :: NaiveDateTime.t()
   def datetime_from_string(string) do
     NaiveDateTime.from_iso8601!(string)
   end
 
+  @spec before_noon?(NaiveDateTime.t) :: boolean
   def before_noon?(datetime) do
     datetime
     |> NaiveDateTime.to_time()
@@ -10,6 +13,7 @@ defmodule LibraryFees do
     |> Kernel.==(:lt)
   end
 
+  @spec return_date(NaiveDateTime.t()) :: Date.t()
   def return_date(checkout_datetime) do
     checkout_datetime
     |> NaiveDateTime.to_date()

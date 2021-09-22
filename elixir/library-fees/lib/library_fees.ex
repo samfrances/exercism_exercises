@@ -45,8 +45,8 @@ defmodule LibraryFees do
 
   @spec calculate_late_fee(String.t, String.t, number) :: number
   def calculate_late_fee(checkout, return, rate) do
-    checkout_dt = NaiveDateTime.from_iso8601!(checkout)
-    returned_dt = NaiveDateTime.from_iso8601!(return)
+    checkout_dt = datetime_from_string(checkout)
+    returned_dt = datetime_from_string(return)
 
     checkout_dt
     |> return_date()

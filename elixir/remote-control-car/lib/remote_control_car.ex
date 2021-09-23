@@ -13,13 +13,8 @@ defmodule RemoteControlCar do
     nickname: nil
   ]
 
-  @spec new :: RemoteControlCar.t
-  def new() do
-    %__MODULE__{nickname: "none"}
-  end
-
   @spec new(String.t) :: RemoteControlCar.t
-  def new(nickname) do
+  def new(nickname \\ "none") do
     %__MODULE__{nickname: nickname}
   end
 

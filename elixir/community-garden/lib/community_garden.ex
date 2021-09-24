@@ -2,19 +2,52 @@
 defmodule Plot do
   @enforce_keys [:plot_id, :registered_to]
   defstruct [:plot_id, :registered_to]
+
+  def new(id, name) do
+    %Plot{plot_id: id, registered_to: name}
+  end
+end
+
+defmodule GardenRegistry do
+  defstruct [
+    next_plot_id: 0,
+    registrations: []
+  ]
+
+  @spec new :: %GardenRegistry{next_plot_id: 0, registrations: []}
+  def new() do
+    %__MODULE__{}
+  end
+
+  def registrations(%__MODULE__{registrations: reg}) do
+    reg
+  end
+
+  def register(
+    %__MODULE__{registrations: reg, next_plot_id: next_id} = registry,
+    name
+  ) do
+    new_plot = Plot.new(next_id, name)
+    new_state = %{
+      registry |
+      next_plot_id: next_id + 1,
+      registrations: [new_plot | reg]
+    }
+    {new_plot, new_state}
+  end
 end
 
 defmodule CommunityGarden do
-  def start(opts) do
-    # Please implement the start/1 function
+  def start() do
+    Agent.start(&GardenRegistry.new/0)
   end
 
   def list_registrations(pid) do
-    # Please implement the list_registrations/1 function
+    Agent.get(pid, &GardenRegistry.registrations/1)
   end
 
   def register(pid, register_to) do
-    # Please implement the register/2 function
+    Agent.get_and_update(pid, GardenRegistry, :register, [register_to])
   end
 
   def release(pid, plot_id) do

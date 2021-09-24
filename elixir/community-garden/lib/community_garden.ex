@@ -9,10 +9,8 @@ defmodule Plot do
 end
 
 defmodule GardenRegistry do
-  defstruct [
-    next_plot_id: 0,
-    registrations: []
-  ]
+  defstruct next_plot_id: 0,
+            registrations: []
 
   @spec new :: %GardenRegistry{next_plot_id: 0, registrations: []}
   def new() do
@@ -24,16 +22,35 @@ defmodule GardenRegistry do
   end
 
   def register(
-    %__MODULE__{registrations: reg, next_plot_id: next_id} = registry,
-    name
-  ) do
+        %__MODULE__{registrations: reg, next_plot_id: next_id} = registry,
+        name
+      ) do
     new_plot = Plot.new(next_id, name)
+
     new_state = %{
-      registry |
-      next_plot_id: next_id + 1,
-      registrations: [new_plot | reg]
+      registry
+      | next_plot_id: next_id + 1,
+        registrations: [new_plot | reg]
     }
+
     {new_plot, new_state}
+  end
+
+  def release(%__MODULE__{registrations: plots} = registry, id) do
+    %{
+      registry
+      | registrations: Enum.filter(plots, fn plot -> plot.plot_id !== id end)
+    }
+  end
+
+  def get_registration(%__MODULE__{registrations: plots}, id) do
+    plots
+    |> Enum.find_value(
+      {:not_found, "plot is unregistered"},
+      fn plot ->
+        if plot.plot_id === id, do: plot
+      end
+    )
   end
 end
 
@@ -51,10 +68,10 @@ defmodule CommunityGarden do
   end
 
   def release(pid, plot_id) do
-    # Please implement the release/2 function
+    Agent.update(pid, GardenRegistry, :release, [plot_id])
   end
 
   def get_registration(pid, plot_id) do
-    # Please implement the get_registration/2 function
+    Agent.get(pid, GardenRegistry, :get_registration, [plot_id])
   end
 end

@@ -3,8 +3,14 @@ defmodule Plot do
   @enforce_keys [:plot_id, :registered_to]
   defstruct [:plot_id, :registered_to]
 
+  @type t :: %__MODULE__{
+          plot_id: non_neg_integer,
+          registered_to: String.t()
+        }
+
+  @spec new(non_neg_integer, String.t()) :: __MODULE__.t()
   def new(id, name) do
-    %Plot{plot_id: id, registered_to: name}
+    %__MODULE__{plot_id: id, registered_to: name}
   end
 end
 
@@ -12,15 +18,22 @@ defmodule GardenRegistry do
   defstruct next_plot_id: 0,
             registrations: []
 
-  @spec new :: %GardenRegistry{next_plot_id: 0, registrations: []}
+  @type t :: %__MODULE__{
+          next_plot_id: non_neg_integer,
+          registrations: [Plot.t()]
+        }
+
+  @spec new :: __MODULE__.t()
   def new() do
     %__MODULE__{}
   end
 
+  @spec registrations(__MODULE__.t()) :: [Plot.t()]
   def registrations(%__MODULE__{registrations: reg}) do
     reg
   end
 
+  @spec register(__MODULE__.t(), String.t()) :: {Plot.t(), __MODULE__.t()}
   def register(
         %__MODULE__{registrations: reg, next_plot_id: next_id} = registry,
         name
@@ -36,6 +49,7 @@ defmodule GardenRegistry do
     {new_plot, new_state}
   end
 
+  @spec release(__MODULE__.t(), non_neg_integer) :: __MODULE__.t()
   def release(%__MODULE__{registrations: plots} = registry, id) do
     %{
       registry
@@ -43,6 +57,7 @@ defmodule GardenRegistry do
     }
   end
 
+  @spec get_registration(__MODULE__.t(), non_neg_integer) :: {:not_found, String.t()} | Plot.t()
   def get_registration(%__MODULE__{registrations: plots}, id) do
     plots
     |> Enum.find_value(

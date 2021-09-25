@@ -23,9 +23,8 @@ defmodule Newsletter do
     emails_path
     |> read_emails()
     |> Enum.each(fn email ->
-      case send_fun.(email) do
-        :ok -> log_sent_email(logpid, email)
-        _ -> nil
+      with :ok <- send_fun.(email) do
+        log_sent_email(logpid, email)
       end
     end)
 

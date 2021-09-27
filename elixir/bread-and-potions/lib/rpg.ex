@@ -22,13 +22,13 @@ defmodule RPG do
   end
 
   defprotocol Edible do
-    @spec eat(t, RPG.Character.t) ::
-      {byproduct :: any, updated_character :: RPG.Character.t}
+    @spec eat(t, RPG.Character.t()) ::
+            {byproduct :: any, updated_character :: RPG.Character.t()}
     def eat(item, character)
   end
 
   defimpl Edible, for: LoafOfBread do
-    @spec eat(%RPG.LoafOfBread{}, RPG.Character.t) :: {nil, RPG.Character.t}
+    @spec eat(%RPG.LoafOfBread{}, RPG.Character.t()) :: {nil, RPG.Character.t()}
     def eat(_item, character) do
       {
         nil,
@@ -56,5 +56,4 @@ defmodule RPG do
       }
     end
   end
-
 end

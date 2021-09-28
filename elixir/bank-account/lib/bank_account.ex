@@ -42,33 +42,35 @@ defmodule BankAccount do
   end
 
   defmodule Account do
-    defstruct [balance: 0, closed: false]
+    defstruct balance: 0, closed: false
 
     @type t :: %__MODULE__{
-      balance: number(),
-      closed: boolean()
-    }
+            balance: number(),
+            closed: boolean()
+          }
 
-    @spec update(BankAccount.Account.t(), any) ::
-            {:error, :account_closed} | BankAccount.Account.t()
+    @spec update(t(), any) ::
+            {:error, :account_closed} | t()
     def update(%__MODULE__{closed: true}, _amount) do
       account_closed_error()
     end
+
     def update(account = %__MODULE__{balance: balance}, amount) do
-      %{ account | balance: balance + amount }
+      %{account | balance: balance + amount}
     end
 
-    @spec balance(BankAccount.Account.t()) :: {:error, :account_closed}|number()
+    @spec balance(t()) :: {:error, :account_closed} | number()
     def balance(%__MODULE__{closed: true}) do
       account_closed_error()
     end
+
     def balance(%__MODULE__{balance: balance}) do
       balance
     end
 
-    @spec close(BankAccount.Account.t()) :: BankAccount.Account.t()
-    def close(account= %__MODULE__{}) do
-      %{ account | closed: true }
+    @spec close(t()) :: t()
+    def close(account = %__MODULE__{}) do
+      %{account | closed: true}
     end
 
     defp account_closed_error() do
@@ -86,19 +88,18 @@ defmodule BankAccount do
 
     @impl true
     def handle_call(:balance, _from, account) do
-      {:reply, BankAccount.Account.balance(account), account }
+      {:reply, BankAccount.Account.balance(account), account}
     end
 
     @impl true
     def handle_call({:update, amount}, _from, account) do
       newstate = BankAccount.Account.update(account, amount)
-      { :reply, newstate, newstate }
+      {:reply, newstate, newstate}
     end
 
     @impl true
     def handle_cast(:close, account) do
-      { :noreply, BankAccount.Account.close(account) }
+      {:noreply, BankAccount.Account.close(account)}
     end
   end
-
 end

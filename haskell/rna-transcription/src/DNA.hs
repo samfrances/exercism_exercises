@@ -1,10 +1,9 @@
 module DNA (toRNA) where
 
 toRNA :: String -> Either Char String
-toRNA "" = Right ""
-toRNA ('G':xs) = ('C':) <$> toRNA xs
-toRNA ('C':xs) = ('G':) <$> toRNA xs
-toRNA ('T':xs) = ('A':) <$> toRNA xs
-toRNA ('A':xs) = ('U':) <$> toRNA xs
-toRNA (x:_) = Left x
-
+toRNA = traverse translate
+    where translate 'G' = Right 'C'
+          translate 'C' = Right 'G'
+          translate 'T' = Right 'A'
+          translate 'A' = Right 'U'
+          translate x = Left x

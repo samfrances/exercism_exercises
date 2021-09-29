@@ -2,18 +2,27 @@ defmodule CaptainsLog do
   @planetary_classes ["D", "H", "J", "K", "L", "M", "N", "R", "T", "Y"]
 
   def random_planet_class() do
-    # Please implement the random_planet_class/0 function
+    Enum.random(@planetary_classes)
   end
 
   def random_ship_registry_number() do
-    # Please implement the random_ship_registry_number/0 function
+    reg_num =
+      Random.exclusive(1000, 10000)
+      |> trunc()
+    "NCC-#{reg_num}"
   end
 
   def random_stardate() do
-    # Please implement the random_stardate/0 function
+    Random.exclusive(41000, 42000)
   end
 
   def format_stardate(stardate) do
-    # Please implement the format_stardate/1 function
+    :erlang.float_to_binary(stardate, decimals: 1)
+  end
+end
+
+defmodule Random do
+  def exclusive(lower, upper) do
+    (:rand.uniform() * (upper - lower)) + lower
   end
 end

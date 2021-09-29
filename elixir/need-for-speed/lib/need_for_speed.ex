@@ -3,7 +3,7 @@ defmodule NeedForSpeed do
   alias NeedForSpeed.Race
   alias NeedForSpeed.RemoteControlCar, as: Car
   import IO
-  import IO.ANSI, except: [color: 1]
+  import IO.ANSI, only: [default_color: 0, red: 0, cyan: 0, green: 0]
   # Do not edit the code below.
 
   def print_race(%Race{} = race) do

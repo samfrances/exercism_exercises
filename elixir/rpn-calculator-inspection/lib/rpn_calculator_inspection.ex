@@ -5,19 +5,17 @@ defmodule RPNCalculatorInspection do
   end
 
   def await_reliability_check_result(%{pid: pid, input: input}, results) do
-    caller = self()
-    Task.start(fn -> Process.send_after(caller, :timeout, 100) end)
     status = receive do
       {:EXIT, _from = ^pid, _reason = :normal} -> :ok
       {:EXIT, _from = ^pid, _reason} -> :error
-      :timeout -> :timeout
+    after
+      100 -> :timeout
     end
     Map.put(results, input, status)
   end
 
   def reliability_check(calculator, inputs) do
-    previous_trap_exit = Keyword.get(Process.info(self()), :trap_exit)
-    Process.flag(:trap_exit, true)
+    previous_trap_exit = Process.flag(:trap_exit, true)
     try do
       inputs
         |> Enum.map(& start_reliability_check(calculator, &1))
@@ -31,6 +29,6 @@ defmodule RPNCalculatorInspection do
     inputs
       |> Enum.map(& fn -> calculator.(&1) end)
       |> Enum.map(&Task.async/1)
-      |> Enum.map(fn task -> Task.await(task, 100) end)
+      |> Enum.map(&Task.await(&1, 100))
   end
 end

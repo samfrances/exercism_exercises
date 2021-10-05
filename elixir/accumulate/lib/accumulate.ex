@@ -17,6 +17,23 @@ defmodule Accumulate do
 
   @spec accumulate(list, (any -> any)) :: list
   def accumulate(list, fun) do
-    for item <- list, do: fun.(item)
+    accumulate(list, fun, [])
+  end
+
+  defp accumulate([], _fun, result) do
+    reverse(result)
+  end
+
+  defp accumulate([first|rest], fun, result) do
+    accumulate(rest, fun, [fun.(first)|result])
+  end
+
+  defp reverse(list) do
+    reverse(list, [])
+  end
+
+  defp reverse([], result), do: result
+  defp reverse([first|rest], result) do
+    reverse(rest, [first|result])
   end
 end

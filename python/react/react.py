@@ -60,14 +60,13 @@ class ComputeCell(Cell):
     def dirty(self):
         return any(inp.dirty for inp in self._inputs)
 
-    @cached_property
-    def _cached_value(self):
+    def _compute_value(self):
         return self._compute_function([
             input_.value for input_ in self._inputs
         ])
 
     @property
     def value(self):
-        if self.dirty:
-            del self._cached_value
+        if self.dirty or not hasattr(self, "_cached_value"):
+            self._cached_value = self._compute_value()
         return self._cached_value

@@ -2,9 +2,8 @@ from functools import cached_property
 
 class Cell:
 
-    @cached_property
-    def _callbacks(self):
-        return set([])
+    def __init__(self):
+        self._callbacks = set([])
 
     def _notify_callbacks(self):
         for callback in self._callbacks:
@@ -19,6 +18,7 @@ class Cell:
 
 class InputCell(Cell):
     def __init__(self, initial_value):
+        super().__init__()
         self._value = initial_value
         self._dirty = False
 
@@ -43,6 +43,7 @@ class InputCell(Cell):
 
 class ComputeCell(Cell):
     def __init__(self, inputs, compute_function):
+        super().__init__()
         self._inputs = inputs
         self._compute_function = compute_function
         for input_ in self._inputs:

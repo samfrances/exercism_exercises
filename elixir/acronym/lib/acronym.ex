@@ -7,8 +7,11 @@ defmodule Acronym do
   def abbreviate(string) do
     ~r/(\s|\-+|_+)/
     |> Regex.split(string, trim: true)
-    |> Stream.map(&String.first/1)
-    |> Stream.map(&String.upcase/1)
+    |> Enum.map(
+      &(&1
+        |> String.first()
+        |> String.upcase())
+    )
     |> Enum.join("")
   end
 end

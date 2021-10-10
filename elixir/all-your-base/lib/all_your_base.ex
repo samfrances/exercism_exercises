@@ -5,35 +5,52 @@ defmodule AllYourBase do
   """
 
   @spec convert(list, integer, integer) :: {:ok, list} | {:error, String.t()}
-  def convert(_digits, _input_base, output_base) when output_base < 2 do
-    {:error, "output base must be >= 2"}
-  end
-  def convert(_digits, input_base, _output_base) when input_base < 2 do
-    {:error, "input base must be >= 2"}
-  end
   def convert(digits, input_base, output_base) do
-    if Enum.any?(digits, invalid_digit(input_base)) do
-      {:error, "all digits must be >= 0 and < input base"}
-    else
-      {:ok, convert_safe(digits, input_base, output_base)}
+    with :ok <- validate_output_base(output_base),
+         :ok <- validate_input_base(input_base),
+         :ok <- validate_digits(digits, input_base)
+    do
+      new_base =
+        digits
+        |> to_base_10_int(input_base)
+        |> int_to_base_x(output_base, [])
+      {:ok, new_base}
     end
   end
 
-  defp invalid_digit(input_base) do
-    fn digit -> digit < 0 or digit >= input_base end
+  defp validate_output_base(n) do
+    if n >= 2 do
+      :ok
+    else
+      {:error, "output base must be >= 2"}
+    end
   end
 
-  defp convert_safe(digits, input_base, output_base) do
-    digits
-    |> to_base_10_int(input_base)
-    |> int_to_base_x(output_base, [])
+  defp validate_input_base(n) do
+    if n >= 2 do
+      :ok
+    else
+      {:error, "input base must be >= 2"}
+    end
+  end
+
+  defp validate_digits(digits, input_base) do
+    if Enum.all?(digits, &(valid_digit(&1, input_base))) do
+      :ok
+    else
+      {:error, "all digits must be >= 0 and < input base"}
+    end
+  end
+
+  defp valid_digit(digit, input_base) do
+    digit >= 0 and digit < input_base
   end
 
   defp to_base_10_int(digits, input_base) do
     digits
     |> Enum.reverse()
-    |> Stream.zip(Stream.iterate(0, & &1 + 1))
-    |> Stream.map(fn {digit, power} -> digit * Integer.pow(input_base, power) end)
+    |> Enum.with_index()
+    |> Enum.map(fn {digit, power} -> digit * Integer.pow(input_base, power) end)
     |> Enum.sum()
   end
 

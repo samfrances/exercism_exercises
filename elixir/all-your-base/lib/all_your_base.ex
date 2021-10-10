@@ -15,7 +15,7 @@ defmodule AllYourBase do
     if Enum.any?(digits, invalid_digit(input_base)) do
       {:error, "all digits must be >= 0 and < input base"}
     else
-      convert_safe(digits, input_base, output_base)
+      {:ok, convert_safe(digits, input_base, output_base)}
     end
   end
 
@@ -24,11 +24,9 @@ defmodule AllYourBase do
   end
 
   defp convert_safe(digits, input_base, output_base) do
-    result =
-      digits
-      |> to_base_10_int(input_base)
-      |> to_base_x_int(output_base, [])
-      {:ok, result}
+    digits
+    |> to_base_10_int(input_base)
+    |> to_base_x_int(output_base, [])
   end
 
   defp to_base_10_int(digits, input_base) do

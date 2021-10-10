@@ -37,9 +37,9 @@ defmodule AllYourBase do
     |> Enum.sum()
   end
 
-  def int_to_base_x(0, _output_base, []), do: [0]
-  def int_to_base_x(0, _output_base, result), do: result
-  def int_to_base_x(number, output_base, result) do
+  defp int_to_base_x(0, _output_base, []), do: [0]
+  defp int_to_base_x(0, _output_base, result), do: result
+  defp int_to_base_x(number, output_base, result) do
     quotient = div(number, output_base)
     remainder = rem(number, output_base)
     int_to_base_x(quotient, output_base, [remainder | result])

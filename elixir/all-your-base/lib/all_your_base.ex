@@ -8,12 +8,12 @@ defmodule AllYourBase do
   def convert(digits, input_base, output_base) do
     with :ok <- validate_output_base(output_base),
          :ok <- validate_input_base(input_base),
-         :ok <- validate_digits(digits, input_base)
-    do
+         :ok <- validate_digits(digits, input_base) do
       new_base =
         digits
         |> to_base_10_int(input_base)
         |> int_to_base_x(output_base, [])
+
       {:ok, new_base}
     end
   end
@@ -35,7 +35,7 @@ defmodule AllYourBase do
   end
 
   defp validate_digits(digits, input_base) do
-    if Enum.all?(digits, &(valid_digit(&1, input_base))) do
+    if Enum.all?(digits, &valid_digit(&1, input_base)) do
       :ok
     else
       {:error, "all digits must be >= 0 and < input base"}
@@ -56,10 +56,10 @@ defmodule AllYourBase do
 
   defp int_to_base_x(0, _output_base, []), do: [0]
   defp int_to_base_x(0, _output_base, result), do: result
+
   defp int_to_base_x(number, output_base, result) do
     quotient = div(number, output_base)
     remainder = rem(number, output_base)
     int_to_base_x(quotient, output_base, [remainder | result])
   end
-
 end

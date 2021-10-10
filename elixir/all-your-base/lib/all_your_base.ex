@@ -18,21 +18,11 @@ defmodule AllYourBase do
     end
   end
 
-  defp validate_output_base(n) do
-    if n >= 2 do
-      :ok
-    else
-      {:error, "output base must be >= 2"}
-    end
-  end
+  defp validate_output_base(n) when n >= 2, do: :ok
+  defp validate_output_base(_n), do: {:error, "output base must be >= 2"}
 
-  defp validate_input_base(n) do
-    if n >= 2 do
-      :ok
-    else
-      {:error, "input base must be >= 2"}
-    end
-  end
+  defp validate_input_base(n) when n >= 2, do: :ok
+  defp validate_input_base(_n), do: {:error, "input base must be >= 2"}
 
   defp validate_digits(digits, input_base) do
     if Enum.all?(digits, &valid_digit(&1, input_base)) do

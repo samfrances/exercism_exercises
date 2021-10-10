@@ -26,7 +26,7 @@ defmodule AllYourBase do
   defp convert_safe(digits, input_base, output_base) do
     digits
     |> to_base_10_int(input_base)
-    |> to_base_x_int(output_base, [])
+    |> int_to_base_x(output_base, [])
   end
 
   defp to_base_10_int(digits, input_base) do
@@ -37,12 +37,12 @@ defmodule AllYourBase do
     |> Enum.sum()
   end
 
-  def to_base_x_int(0, _output_base, []), do: [0]
-  def to_base_x_int(0, _output_base, result), do: result
-  def to_base_x_int(number, output_base, result) do
+  def int_to_base_x(0, _output_base, []), do: [0]
+  def int_to_base_x(0, _output_base, result), do: result
+  def int_to_base_x(number, output_base, result) do
     quotient = div(number, output_base)
     remainder = rem(number, output_base)
-    to_base_x_int(quotient, output_base, [remainder | result])
+    int_to_base_x(quotient, output_base, [remainder | result])
   end
 
 end

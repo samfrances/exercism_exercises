@@ -7,10 +7,10 @@ defmodule Anagram do
     base_fingerprint = fingerprint(base)
     candidates
     |> Enum.reject(& String.downcase(&1) == String.downcase(base))
-    |> Enum.filter(& is_anagram?(&1, base_fingerprint))
+    |> Enum.filter(& anagram?(&1, base_fingerprint))
   end
 
-  defp is_anagram?(word, fingerprint) do
+  defp anagram?(word, fingerprint) do
     fingerprint(word) == fingerprint
   end
 

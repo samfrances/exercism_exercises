@@ -7,9 +7,11 @@ defmodule Anagram do
     base_fingerprint = fingerprint(base)
     candidates
     |> Enum.reject(& String.downcase(&1) == String.downcase(base))
-    |> Enum.map(&with_fingerprint/1)
-    |> Enum.filter(fingerprint_equals(base_fingerprint))
-    |> Enum.map(&without_fingerprint/1)
+    |> Enum.filter(& is_anagram(&1, base_fingerprint))
+  end
+
+  defp is_anagram(word, fingerprint) do
+    fingerprint(word) == fingerprint
   end
 
   defp fingerprint(str) do
@@ -17,20 +19,6 @@ defmodule Anagram do
     |> String.downcase()
     |> String.graphemes()
     |> Enum.sort()
-  end
-
-  defp with_fingerprint(str) do
-    {str, fingerprint(str)}
-  end
-
-  defp without_fingerprint({str, _fingerprint}) do
-    str
-  end
-
-  defp fingerprint_equals(fingerprint) do
-    fn {_str, other_fingerprint} ->
-      fingerprint === other_fingerprint
-    end
   end
 
 end

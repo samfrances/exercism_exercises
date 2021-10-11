@@ -6,11 +6,10 @@ defmodule Anagram do
   def match(base, candidates) do
     base_fingerprint = fingerprint(base)
     candidates
-    |> Stream.reject(& String.downcase(&1) == String.downcase(base))
-    |> Stream.map(&with_fingerprint/1)
-    |> Stream.filter(fingerprint_equals(base_fingerprint))
-    |> Stream.map(&without_fingerprint/1)
-    |> Enum.to_list()
+    |> Enum.reject(& String.downcase(&1) == String.downcase(base))
+    |> Enum.map(&with_fingerprint/1)
+    |> Enum.filter(fingerprint_equals(base_fingerprint))
+    |> Enum.map(&without_fingerprint/1)
   end
 
   defp fingerprint(str) do

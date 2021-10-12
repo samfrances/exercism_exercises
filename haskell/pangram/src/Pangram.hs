@@ -1,10 +1,10 @@
 module Pangram (isPangram) where
 
 import Data.Char (toLower)
+import Data.Set (isSubsetOf)
 import qualified Data.Set as Set
 
 isPangram :: String -> Bool
-isPangram text =
-    (length . Set.fromList . letters $ text) >= 26
-    where letters = filter isAlpha . map toLower
-          isAlpha = (`elem` ['a'..'z'])
+isPangram text = alphabet `isSubsetOf` letters
+    where letters = Set.fromList . map toLower $ text
+          alphabet = Set.fromList ['a'..'z']

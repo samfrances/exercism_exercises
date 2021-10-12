@@ -1,11 +1,10 @@
 module Pangram (isPangram) where
 
-import Data.List (sort, group)
 import Data.Char (toLower)
+import qualified Data.Set as Set
 
 isPangram :: String -> Bool
 isPangram text =
-    (length . unique . letters $ text) >= 26
-    where unique = map head . group . sort
-          letters = filter isAlpha . map toLower
+    (length . letters . Set.fromList $ text) >= 26
+    where letters = Set.filter isAlpha . Set.map toLower
           isAlpha = (`elem` ['a'..'z'])

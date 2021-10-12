@@ -5,6 +5,6 @@ import qualified Data.Set as Set
 
 isPangram :: String -> Bool
 isPangram text =
-    (length . letters . Set.fromList $ text) >= 26
-    where letters = Set.filter isAlpha . Set.map toLower
+    (length . Set.fromList . letters $ text) >= 26
+    where letters = filter isAlpha . map toLower
           isAlpha = (`elem` ['a'..'z'])

@@ -8,5 +8,4 @@ isPangram text =
     (length . unique . letters $ text) >= 26
     where unique = map head . group . sort
           letters = filter isAlpha . map toLower
-          isAlpha = (`elem` alphabet)
-          alphabet = "abcdefghijklmnopqrstuvwxyz"
+          isAlpha = (`elem` ['a'..'z'])

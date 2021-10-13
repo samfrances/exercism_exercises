@@ -9,5 +9,13 @@ defmodule ETL do
   """
   @spec transform(map) :: map
   def transform(input) do
+    input
+    |> Enum.flat_map(fn
+      {n, letters} ->
+        letters
+        |> Enum.map(&String.downcase/1)
+        |> Enum.map(&{&1, n})
+    end)
+    |> Map.new()
   end
 end

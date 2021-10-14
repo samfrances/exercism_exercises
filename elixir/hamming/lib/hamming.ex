@@ -8,14 +8,13 @@ defmodule Hamming do
   {:ok, 4}
   """
   @spec hamming_distance([char], [char]) :: {:ok, non_neg_integer} | {:error, String.t()}
-  def hamming_distance(strand1, strand2) when
-    length(strand1) === length strand2
-  do
+  def hamming_distance(strand1, strand2)
+      when length(strand1) === length(strand2) do
     distance =
       strand1
       |> Enum.zip(strand2)
-      |> Enum.reject(fn {n1, n2} -> n1 == n2 end)
-      |> Enum.count()
+      |> Enum.count(fn {n1, n2} -> n1 != n2 end)
+
     {:ok, distance}
   end
 

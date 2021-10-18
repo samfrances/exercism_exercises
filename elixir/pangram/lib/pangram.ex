@@ -11,8 +11,15 @@ defmodule Pangram do
       true
 
   """
+  @alphabet ?a..?z |> Enum.to_list() |> Enum.map(& <<&1>>) |> MapSet.new()
 
   @spec pangram?(String.t()) :: boolean
   def pangram?(sentence) do
+    letters =
+      sentence
+      |> String.downcase()
+      |> String.codepoints()
+      |> MapSet.new()
+    MapSet.subset?(@alphabet, letters)
   end
 end

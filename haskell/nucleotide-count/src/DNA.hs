@@ -8,7 +8,7 @@ nucleotideCounts :: String -> Either String (Map Nucleotide Int)
 nucleotideCounts xs = count <$> dnaFromString xs
 
     where count :: [Nucleotide] -> Map Nucleotide Int
-          count = fromListWith (+) . map (\n -> (n, 1))
+          count nucs = fromListWith (+) $ zip nucs (repeat 1)
 
           dnaFromString :: String -> Either String [Nucleotide]
           dnaFromString = traverse nucleotideFromChar

@@ -1,22 +1,30 @@
 module SecretHandshake (handshake) where
 
 import Data.Bits
-import Data.Maybe
 
 handshake :: Int -> [String]
-handshake n = orderActions n $ mapMaybe (getAction n) [0..3]
+handshake n = foldr (.) id (getActions n) $ []
 
-getAction :: Int -> Int -> Maybe String
-getAction n actionBit = if include then Just action else Nothing
-                            where action = actions !! actionBit
-                                  actions = ["wink", "double blink", "close your eyes", "jump"]
-                                  include = testBit n actionBit
+type ActionFn = [String] -> [String]
 
-orderActions :: Int -> [String] -> [String]
-orderActions n actions = if (shouldReverse n) then reverse actions else actions
+getActions :: Int -> [ActionFn]
+getActions n = [(orderActions n), (jump n), (closeEyes n), (doubleBlink n),  (wink n)]
 
-shouldReverse :: Int -> Bool
-shouldReverse n = testBit n 4
+wink :: Int -> ActionFn
+wink n actions = if testBit n 0 then "wink":actions else actions
+
+doubleBlink :: Int -> ActionFn
+doubleBlink n actions = if testBit n 1 then "double blink":actions else actions
+
+closeEyes :: Int -> ActionFn
+closeEyes n actions = if testBit n 2 then "close your eyes":actions else actions
+
+jump :: Int -> ActionFn
+jump n actions = if testBit n 3 then "jump":actions else actions
+
+orderActions :: Int -> ActionFn
+orderActions n actions = if (testBit n 4) then actions else reverse actions
+
 
 
 
